@@ -1,0 +1,1 @@
+'''//how to for loop in python?'''
