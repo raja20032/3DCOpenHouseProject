@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Ninja CV - Slice with Your Hands!</title>
+    <meta name="description" content="Play Fruit Ninja using hand tracking! Swipe through fruits with your finger via webcam. No installation required.">
+    
+    <!-- Preload fonts for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Game Canvas -->
+    <canvas id="gameCanvas"></canvas>
+    
+    <!-- Webcam Video (hidden, used for processing) -->
+    <video id="webcam" autoplay playsinline></video>
+    
+    <!-- Camera Preview (toggleable) -->
+    <div id="cameraPreview">
+        <video id="cameraFeed" autoplay playsinline muted></video>
+        <div id="cameraLabel">Camera</div>
+    </div>
+    
+    <!-- UI Overlay -->
+    <div id="ui-overlay">
+        <!-- Score Display -->
+        <div id="score-container">
+            <div id="score-icon">🍉</div>
+            <div id="score">0</div>
+        </div>
+        
+        <!-- Lives Display -->
+        <div id="lives-container">
+            <span class="life active">✕</span>
+            <span class="life active">✕</span>
+            <span class="life active">✕</span>
+        </div>
+        
+        <!-- Best Score -->
+        <div id="best-score">BEST: <span id="best-score-value">0</span></div>
+    </div>
+    
+    <!-- Combo Text -->
+    <div id="combo-text"></div>
+    
+    <!-- Score Popups Container -->
+    <div id="score-popups"></div>
+    
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen">
+        <div class="screen-content">
+            <h1 class="game-title">
+                <span class="fruit">FRUIT</span>
+                <span class="ninja">NINJA</span>
+                <span class="cv">CV</span>
+            </h1>
+            <p class="tagline">Slice fruits with your hands!</p>
+            
+            <div class="instructions">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <p>Allow camera access when prompted</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <p>Position your hand in view</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <p>Swipe your finger to slice fruits!</p>
+                </div>
+            </div>
+            
+            <button id="start-btn" class="game-btn">
+                <span class="btn-icon">👋</span>
+                START GAME
+            </button>
+            
+            <p class="camera-note">🎥 Camera required for hand tracking</p>
+        </div>
+    </div>
+    
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="screen hidden">
+        <div class="screen-content">
+            <h2 class="gameover-title">GAME OVER</h2>
+            
+            <div class="final-score-container">
+                <div class="final-score-label">SCORE</div>
+                <div id="final-score" class="final-score">0</div>
+            </div>
+            
+            <div id="new-highscore" class="new-highscore hidden">
+                🏆 NEW HIGH SCORE! 🏆
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value" id="fruits-sliced">0</div>
+                    <div class="stat-label">Fruits Sliced</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="best-combo">0</div>
+                    <div class="stat-label">Best Combo</div>
+                </div>
+            </div>
+            
+            <button id="restart-btn" class="game-btn">
+                <span class="btn-icon">🔄</span>
+                PLAY AGAIN
+            </button>
+        </div>
+    </div>
+    
+    <!-- Camera Toggle Button -->
+    <button id="camera-toggle" class="control-btn" title="Toggle Camera View">
+        📷
+    </button>
+    
+    <!-- Sound Toggle Button -->
+    <button id="sound-toggle" class="control-btn" title="Toggle Sound">
+        🔊
+    </button>
+    
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p id="loading-text">Initializing hand tracking...</p>
+        </div>
+    </div>
+    
+    <!-- MediaPipe Hands CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1675466124/drawing_utils.min.js"></script>
+    
+    <!-- Game Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/blade.js"></script>
+    <script src="js/fruit.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/handTracking.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
