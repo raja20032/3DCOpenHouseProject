@@ -1,0 +1,615 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+.body {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    min-width: 100%;
+    background: radial-gradient(circle at 20% 80%, #120458 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, #421e84 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, #8b1e84 0%, transparent 50%),
+        linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Press Start 2P", monospace;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+}
+
+/* Animated floating particles */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00ffff;
+    animation: float 8s infinite linear;
+    box-shadow: 0 0 6px #00ffff;
+}
+
+.particle:nth-child(1) {
+    left: 10%;
+    animation-delay: -2s;
+    animation-duration: 6s;
+}
+.particle:nth-child(2) {
+    left: 20%;
+    animation-delay: -4s;
+    animation-duration: 8s;
+    background: #ff00ff;
+    box-shadow: 0 0 6px #ff00ff;
+}
+.particle:nth-child(3) {
+    left: 30%;
+    animation-delay: -1s;
+    animation-duration: 7s;
+    background: #ffff00;
+    box-shadow: 0 0 6px #ffff00;
+}
+.particle:nth-child(4) {
+    left: 40%;
+    animation-delay: -3s;
+    animation-duration: 9s;
+}
+.particle:nth-child(5) {
+    left: 50%;
+    animation-delay: -5s;
+    animation-duration: 6s;
+    background: #ff00ff;
+    box-shadow: 0 0 6px #ff00ff;
+}
+.particle:nth-child(6) {
+    left: 60%;
+    animation-delay: -2s;
+    animation-duration: 8s;
+    background: #ffff00;
+    box-shadow: 0 0 6px #ffff00;
+}
+.particle:nth-child(7) {
+    left: 70%;
+    animation-delay: -4s;
+    animation-duration: 7s;
+}
+.particle:nth-child(8) {
+    left: 80%;
+    animation-delay: -1s;
+    animation-duration: 9s;
+    background: #ff00ff;
+    box-shadow: 0 0 6px #ff00ff;
+}
+.particle:nth-child(9) {
+    left: 90%;
+    animation-delay: -3s;
+    animation-duration: 6s;
+    background: #ffff00;
+    box-shadow: 0 0 6px #ffff00;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(1000px) rotate(0deg) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(900px) rotate(36deg) scale(1);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(-100px) rotate(324deg) scale(1);
+    }
+    100% {
+        transform: translateY(-200px) rotate(360deg) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Scanline effect */
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 0, 0.03) 2px,
+        rgba(0, 255, 0, 0.03) 4px
+    );
+    animation: scanline 2s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes scanline {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(1000px);
+    }
+}
+
+.container {
+    text-align: center;
+    z-index: 10;
+    position: relative;
+    width: 100%;
+    max-width: 1800px;
+    padding: 40px 20px;
+}
+
+.retro-title {
+    color: #fff;
+    font-size: 32px;
+    text-wrap: nowrap;
+    margin-bottom: 100px; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    animation:
+        titleGlow 3s ease-in-out infinite alternate,
+        titleFloat 4s ease-in-out infinite,
+        titleRainbow 6s linear infinite;
+}
+
+@keyframes titleGlow {
+    0% {
+        text-shadow:
+            0 0 5px #00ffff,
+            0 0 10px #00ffff,
+            0 0 15px #00ffff,
+            0 0 20px #00ffff;
+    }
+    100% {
+        text-shadow:
+            0 0 10px #ff00ff,
+            0 0 20px #ff00ff,
+            0 0 30px #ff00ff,
+            0 0 40px #ff00ff;
+    }
+}
+
+@keyframes titleFloat {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes titleRainbow {
+    0% {
+        color: #ff0000;
+    }
+    16.66% {
+        color: #ff8800;
+    }
+    33.33% {
+        color: #ffff00;
+    }
+    50% {
+        color: #00ff00;
+    }
+    66.66% {
+        color: #0088ff;
+    }
+    83.33% {
+        color: #8800ff;
+    }
+    100% {
+        color: #ff0000;
+    }
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* Main button container */
+.pixel-button {
+    display: inline-block;
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+    animation: buttonFloat 3s ease-in-out infinite;
+    transform-style: preserve-3d;
+    width: 100%;
+    max-width: 400px;
+}
+
+@keyframes buttonFloat {
+    0%,
+    100% {
+        transform: translateY(0px) rotateX(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotateX(5deg);
+    }
+}
+
+.button-link {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+/* Button body with extreme pixel styling */
+.button-body {
+    position: relative;
+    padding: 25px 40px;
+    background: linear-gradient(45deg, #ff6b35, #ff8f65);
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    
+    /* Ultra pixel-perfect border */
+    box-shadow: 
+        /* Inner glow */
+        inset 0 0 0 2px #ffaa88,
+        inset 0 0 0 4px #ff6b35,
+        /* Main borders */ 0 0 0 2px #ff6b35,
+        0 0 0 4px #e63946,
+        0 0 0 6px #c1121f,
+        0 0 0 8px #2d3436,
+        /* Shadow layers */ 6px 6px 0 8px #636e72,
+        8px 8px 0 8px #495057,
+        10px 10px 0 8px #343a40,
+        /* Glow effects */ 0 0 20px rgba(255, 107, 53, 0.4),
+        0 0 40px rgba(255, 107, 53, 0.2);
+
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation:
+        buttonPulse 2s ease-in-out infinite,
+        buttonGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes buttonPulse {
+    0%,
+    50%,
+    100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.02);
+    }
+    75% {
+        transform: scale(0.98);
+    }
+}
+
+@keyframes buttonGlow {
+    0% {
+        box-shadow:
+            inset 0 0 0 2px #ffaa88,
+            inset 0 0 0 4px #ff6b35,
+            0 0 0 2px #ff6b35,
+            0 0 0 4px #e63946,
+            0 0 0 6px #c1121f,
+            0 0 0 8px #2d3436,
+            6px 6px 0 8px #636e72,
+            8px 8px 0 8px #495057,
+            10px 10px 0 8px #343a40,
+            0 0 20px rgba(255, 107, 53, 0.4),
+            0 0 40px rgba(255, 107, 53, 0.2);
+    }
+    100% {
+        box-shadow:
+            inset 0 0 0 2px #ffaa88,
+            inset 0 0 0 4px #ff6b35,
+            0 0 0 2px #ff6b35,
+            0 0 0 4px #e63946,
+            0 0 0 6px #c1121f,
+            0 0 0 8px #2d3436,
+            6px 6px 0 8px #636e72,
+            8px 8px 0 8px #495057,
+            10px 10px 0 8px #343a40,
+            0 0 30px rgba(255, 107, 53, 0.8),
+            0 0 60px rgba(255, 107, 53, 0.4),
+            0 0 80px rgba(255, 107, 53, 0.2);
+    }
+}
+
+/* Hover state with extreme transformation */
+.pixel-button:hover .button-body {
+    background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+    transform: translate(-4px, -4px) scale(1.05) rotateZ(2deg);
+    box-shadow:
+        inset 0 0 0 2px #ffe4e1,
+        inset 0 0 0 4px #fd79a8,
+        0 0 0 2px #fd79a8,
+        0 0 0 4px #e84393,
+        0 0 0 6px #d63031,
+        0 0 0 8px #2d3436,
+        10px 10px 0 8px #636e72,
+        12px 12px 0 8px #495057,
+        14px 14px 0 8px #343a40,
+        0 0 30px rgba(253, 121, 168, 0.8),
+        0 0 60px rgba(253, 121, 168, 0.4),
+        0 0 100px rgba(253, 121, 168, 0.2);
+    animation:
+        buttonHover 0.3s ease-in-out infinite alternate,
+        buttonPulse 1s ease-in-out infinite;
+}
+
+@keyframes buttonHover {
+    0% {
+        filter: hue-rotate(0deg) brightness(1.1);
+    }
+    100% {
+        filter: hue-rotate(10deg) brightness(1.2);
+    }
+}
+
+/* Active/pressed state */
+.pixel-button:active .button-body {
+    transform: translate(6px, 6px) scale(0.95) rotateZ(-1deg);
+    box-shadow:
+        inset 0 0 0 2px #ffe4e1,
+        inset 0 0 0 4px #fd79a8,
+        0 0 0 2px #fd79a8,
+        0 0 0 4px #e84393,
+        0 0 0 6px #d63031,
+        0 0 0 8px #2d3436,
+        2px 2px 0 8px #636e72,
+        4px 4px 0 8px #495057,
+        6px 6px 0 8px #343a40,
+        0 0 15px rgba(253, 121, 168, 1);
+    animation: buttonPress 0.1s ease-out;
+}
+
+@keyframes buttonPress {
+    0% {
+        transform: translate(6px, 6px) scale(0.95) rotateZ(-1deg);
+    }
+    50% {
+        transform: translate(8px, 8px) scale(0.9) rotateZ(-2deg);
+    }
+    100% {
+        transform: translate(6px, 6px) scale(0.95) rotateZ(-1deg);
+    }
+}
+
+/* Animated pixel heart */
+.pixel-heart {
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    margin-right: 20px;
+    position: relative;
+    animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+.pixel-heart::before,
+.pixel-heart::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 26px;
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+    animation: heartGlow 2s ease-in-out infinite alternate;
+}
+
+.pixel-heart::after {
+    left: -4px;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+@keyframes heartBeat {
+    0%,
+    50%,
+    100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.2);
+    }
+    75% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes heartGlow {
+    0% {
+        background: #fff;
+        box-shadow: 0 0 5px #ff69b4;
+    }
+    100% {
+        background: #ff69b4;
+        box-shadow:
+            0 0 15px #ff1493,
+            0 0 25px #ff69b4;
+    }
+}
+
+/* Animated sparkles around button */
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 0%;
+    animation: sparkleAnimation 2s linear infinite;
+}
+
+.sparkle:nth-child(1) {
+    top: -10px;
+    left: 20%;
+    animation-delay: 0s;
+    background: #00ffff;
+    box-shadow: 0 0 10px #00ffff;
+}
+.sparkle:nth-child(2) {
+    top: 50%;
+    right: -10px;
+    animation-delay: 0.5s;
+    background: #ff00ff;
+    box-shadow: 0 0 10px #ff00ff;
+}
+.sparkle:nth-child(3) {
+    bottom: -10px;
+    left: 70%;
+    animation-delay: 1s;
+    background: #ffff00;
+    box-shadow: 0 0 10px #ffff00;
+}
+.sparkle:nth-child(4) {
+    top: 20%;
+    left: -10px;
+    animation-delay: 1.5s;
+    background: #00ff00;
+    box-shadow: 0 0 10px #00ff00;
+}
+
+@keyframes sparkleAnimation {
+    0%,
+    100% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.5) rotate(180deg);
+        opacity: 1;
+    }
+}
+
+/* Sound wave effect - теперь одна над всеми кнопками */
+.sound-wave {
+    position: relative;
+    font-size: 14px;
+    color: #fdcb6e;
+    margin-bottom: 40px;
+    animation: soundWave 2s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(253, 203, 110, 0.8);
+}
+
+@keyframes soundWave {
+    0%,
+    90%,
+    100% {
+        opacity: 0.5;
+        transform: translateY(0) scale(0.8);
+    }
+    10%,
+    80% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.2);
+    }
+}
+
+/* Description with typewriter effect */
+.description {
+    color: #74b9ff;
+    font-size: 11px;
+    margin-top: 30px;
+    line-height: 1.8;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typewriter 4s steps(80) infinite;
+}
+
+@keyframes typewriter {
+    0%,
+    90%,
+    100% {
+        width: 0;
+    }
+    30%,
+    60% {
+        width: 100%;
+    }
+}
+
+.pixel-button:hover .button-body {
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.6);
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.pixel-button:nth-child(2) .button-body {
+    background: linear-gradient(45deg, #ffd700, #ffaa00);
+}
+.pixel-button:nth-child(2):hover .button-body {
+    background: linear-gradient(45deg, #ff9500, #ff6b00);
+}
+
+.pixel-button:nth-child(3) .button-body {
+    background: linear-gradient(45deg, #38b000, #70e000);
+}
+.pixel-button:nth-child(3):hover .button-body {
+    background: linear-gradient(45deg, #007200, #38b000);
+}
+
+.pixel-button:nth-child(4) .button-body {
+    background: linear-gradient(45deg, #4cc9f0, #4361ee);
+}
+.pixel-button:nth-child(4):hover .button-body {
+    background: linear-gradient(45deg, #3a86ff, #8338ec);
+}
+
+.pixel-button:nth-child(5) .button-body {
+    background: linear-gradient(45deg, #ff5d8f, #ff97b7);
+}
+.pixel-button:nth-child(5):hover .button-body {
+    background: linear-gradient(45deg, #ff006e, #ff5d8f);
+}
+
+.playground {
+    display: flex;
+    gap: 40px; 
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto 50px auto; 
+    max-width: 1800px;
+    width: 95%;
+}
+
+.playground img,
+.playground iframe {
+    width: 750px; 
+    height: 500px; 
+    border: 6px solid #00ffff;
+    border-radius: 10px;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.7),
+        0 0 60px rgba(0, 255, 255, 0.4),
+        0 0 90px rgba(0, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.8);
+    object-fit: cover;
+}
+
+.playground img {
+    transform: scaleX(-1);
+}
+
+.playground iframe {
+    border-color: #ff00ff;
+    box-shadow: 
+        0 0 30px rgba(255, 0, 255, 0.7),
+        0 0 60px rgba(255, 0, 255, 0.4),
+        0 0 90px rgba(255, 0, 255, 0.2);
+}

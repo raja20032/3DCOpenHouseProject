@@ -17,6 +17,7 @@ threshold = 0.6
 alpha = 0.3
 pre_trained_model_path = "model/pretrained_model.pb"
 
+
 def main():
     graph, sess = load_graph(pre_trained_model_path)
     cap = cv2.VideoCapture(0)

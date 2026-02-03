@@ -7,25 +7,27 @@ from utils import load_graph, detect_hands, predict
 from utils import ORANGE, RED, GREEN
 from pyKey import pressKey, releaseKey, press 
 import keyboard
+import time
 import webbrowser
 from flask import Flask, render_template, Response
 
 
-global capture,rec_frame, grey, switch, neg, face, rec, out 
-capture=0
-grey=0
-neg=0
-face=0
-switch=1
-rec=0
+global capture, rec_frame, grey, switch, neg, face, rec, out
+capture = 0
+grey = 0
+neg = 0
+face = 0
+switch = 1
+rec = 0
 
 app = Flask(__name__ ,template_folder='./templates')
 
 camera = cv2.VideoCapture(0) 
 
+
 def record(out):
     global rec_frame
-    while(rec):
+    while rec:
         time.sleep(0.05)
         out.write(rec_frame)
 
@@ -54,16 +56,19 @@ def detect_face(frame):
         pass
     return frame
 
+
 width = 640
 height = 480
 threshold = 0.6
 alpha = 0.3
 pre_trained_model_path = "model/pretrained_model.pb"
 
+
 @app.route('/')
 def index():
     """Video streaming home page."""
     return render_template('index.html')
+
 
 def main():
     '''webbrowser.open_new("https://supermario-game.com/")'''
@@ -170,4 +175,5 @@ def video_feed():
 
 if __name__ == '__main__':
     main()
-    app.run()
+    app.run(host='127.0.0.1', port=5000, debug=True)
+
