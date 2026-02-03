@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Fruit Ninja CV - Play with Hand Tracking!</title>
+    <meta name="description" content="Play Fruit Ninja using your webcam! Control the game with hand gestures - swipe to slice fruits and avoid the bombs." />
+    <link rel="icon" href="/favicon.png" type="image/png">
+
+    <meta property="og:title" content="Fruit Ninja CV - Hand Tracking Game" />
+    <meta property="og:description" content="Play Fruit Ninja using your webcam and hand gestures! Slice fruits, avoid bombs." />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <meta name="theme-color" content="#8B4513" />
+    
+    <style>
+      /* Prevent overscroll/bounce on mobile */
+      html, body {
+        overscroll-behavior: none;
+        touch-action: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <!-- MediaPipe CDN - must load before app -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
