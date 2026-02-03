@@ -192,7 +192,7 @@ def main_geometry_classic():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-    fps = 10
+    fps = 60
     delay = 1.0 / fps
 
     try:
@@ -254,7 +254,7 @@ def main_subway_surfers():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-    fps = 10
+    fps = 60
     delay = 1.0 / fps
 
     current_lane = 2  # center line (1 -- left line, 3 -- right line)
@@ -345,6 +345,77 @@ def video_feed_subway_surfers():
     '''return Response(gen_frames(),
                    mimetype='multipart/x-mixed-replace; boundary=frame')'''
     return Response(main_subway_surfers(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+# Apple Worm
+@app.route('/apple_worm')
+def apple_worm():
+    return render_template('apple_worm.html')
+
+
+def main_apple_worm():
+    graph, sess = load_graph(pre_trained_model_path)
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+    left_zone = width // 3
+    right_zone = 2 * width // 3
+    top_zone = height // 3
+    bottom_zone = 2 * height // 3
+
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            display_frame = cv2.flip(frame, 1)
+            frame_rgb = cv2.cvtColor(display_frame, cv2.COLOR_BGR2RGB)
+
+            try:
+                boxes, scores, classes = detect_hands(frame_rgb, graph, sess)
+                results = predict(boxes, scores, classes, threshold, width, height)
+
+                if len(results) == 1:
+                    x_min, x_max, y_min, y_max, category = results[0]
+                    x_center = int((x_min + x_max) / 2)
+                    y_center = int((y_min + y_max) / 2)
+
+                    if category == "Open":
+                        if x_center <= left_zone:
+                            keyboard.press_and_release('left')
+
+                        elif x_center >= right_zone:
+                            keyboard.press_and_release('right')
+
+                        elif left_zone < x_center < right_zone and y_center <= top_zone:
+                            keyboard.press_and_release('up')
+
+                        elif left_zone < x_center < right_zone and y_center >= bottom_zone:
+                            keyboard.press_and_release('down')
+
+            except Exception as e:
+                print(f"Error: {e}")
+                continue
+
+            ret, buffer = cv2.imencode('.jpg', display_frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+            if ret:
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cap.release()
+
+
+@app.route('/video_feed_apple_worm')
+def video_feed_apple_worm():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    '''return Response(gen_frames(),
+                   mimetype='multipart/x-mixed-replace; boundary=frame')'''
+    return Response(main_apple_worm(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 if __name__ == '__main__':

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>3DC Open House</title>
+</head>
+<body>
+    <div class="body">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="scanlines"></div>
+
+        <div class="container">
+
+            <p class="retro-title">◆ 3DC Open House ◆</p>
+
+            <div class="sound-wave">♪ *BEEP BOOP* ♪</div>
+
+            <div class="playground">
+                <img src="{{ url_for('video_feed_super_mario')}}" alt ="Camera Feed">
+                <iframe onLoad="window.scroll(0, 150)" src="https://appleworm.io/"></iframe>
+            </div>
+
+            <div class="buttons-container">
+                <div class="pixel-button">
+                    <a href="/" class="button-link">
+                        <div class="button-body">
+                            <span class="pixel-heart"></span> Menu
+                        </div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                    </a>
+                </div>
+            </div>
+
+            <p class="description">
+                ► Try to play without the keyboard! ◄
+            </p>
+        </div>
+    </div>
+</body>
+</html>
