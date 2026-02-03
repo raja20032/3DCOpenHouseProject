@@ -27,6 +27,67 @@
 
 
 
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tablink {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.tablink:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.tablink.active {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.tabcontent {
+  display: none;
+  padding: 14px 16px 24px;
+}
+
+.tabcontent.active {
+  display: block;
+}
+
+.panel {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.frame {
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.media {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
 .hero-image {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://i.gifer.com/embedded/download/OKEq.gif");
   height: 15%;
@@ -64,6 +125,15 @@
 </head>
 <body>
 
+    <div class="tabs" role="tablist" aria-label="Games">
+      <button class="tablink active" type="button" role="tab" aria-selected="true" aria-controls="tab-mario" data-target="tab-mario">
+        Mario
+      </button>
+      <button class="tablink" type="button" role="tab" aria-selected="false" aria-controls="tab-fruit" data-target="tab-fruit">
+        Fruit Ninja
+      </button>
+    </div>
+
     <div class="hero-image">
         <div class="hero-text">
           <h1 style="font-size:30px">SUTD EVENT NAME</h1>
@@ -72,15 +142,96 @@
         </div>
       </div>
 
-      <div style="padding-left: 50px; text-align: center;">
-        <img style="transform: scaleX(-1);" src="{{ url_for('video_feed')}}" alt ="url video feed" width = "720" height="600" >
-        <iframe width="800" height="600" onLoad="window.scroll(0, 150)" src="https://supermario-game.com/fullscreen" ></iframe>
-        <a href="dino.html" target="blank">DINO GAME</a>
+      <div id="tab-mario" class="tabcontent active" role="tabpanel">
+        <div class="panel">
+          <img
+            id="mario-camera"
+            class="media"
+            style="transform: scaleX(-1);"
+            src="{{ url_for('video_feed')}}"
+            data-src="{{ url_for('video_feed')}}"
+            alt="Webcam gesture feed"
+            width="720"
+            height="600"
+          >
+          <iframe
+            class="frame"
+            width="800"
+            height="600"
+            onLoad="window.scroll(0, 150)"
+            src="https://supermario-game.com/fullscreen"
+            title="Mario game"
+            allow="fullscreen"
+          ></iframe>
+        </div>
+
+        <div style="text-align:center; padding-top: 10px;">
+          <a href="dino.html" target="blank" style="color: white;">DINO GAME</a>
+        </div>
+      </div>
+
+      <div id="tab-fruit" class="tabcontent" role="tabpanel">
+        <div class="panel">
+          <iframe
+            id="fruit-iframe"
+            class="frame"
+            width="1200"
+            height="700"
+            src="about:blank"
+            data-src="https://fruit-ninja-cv.vercel.app"
+            title="Fruit Ninja (CV)"
+            allow="camera; microphone; fullscreen"
+          ></iframe>
+        </div>
       </div>
     
 
    
     
+ 
+<script>
+  (function () {
+    const tabButtons = Array.from(document.querySelectorAll(".tablink"));
+    const tabPanels = Array.from(document.querySelectorAll(".tabcontent"));
+    const marioCam = document.getElementById("mario-camera");
+    const fruitFrame = document.getElementById("fruit-iframe");
 
+    function setActive(targetId) {
+      tabButtons.forEach((btn) => {
+        const isActive = btn.dataset.target === targetId;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      tabPanels.forEach((panel) => {
+        panel.classList.toggle("active", panel.id === targetId);
+      });
+
+      // Release the webcam when leaving the Mario tab so other apps/iframes can use it.
+      if (marioCam) {
+        const isMarioActive = targetId === "tab-mario";
+        // Add a timestamp when re-enabling to force a fresh connection.
+        const desiredSrc = isMarioActive ? ((marioCam.dataset.src || "") + "?t=" + Date.now()) : "";
+        if (marioCam.getAttribute("src") !== desiredSrc) {
+          marioCam.setAttribute("src", desiredSrc);
+        }
+      }
+
+      // Fruit Ninja is cross-origin; the only reliable way to release its camera
+      // is to unload the iframe when leaving the tab.
+      if (fruitFrame) {
+        const isFruitActive = targetId === "tab-fruit";
+        const desiredSrc = isFruitActive ? (fruitFrame.dataset.src || "") : "about:blank";
+        if (fruitFrame.getAttribute("src") !== desiredSrc) {
+          fruitFrame.setAttribute("src", desiredSrc);
+        }
+      }
+    }
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => setActive(btn.dataset.target));
+    });
+  })();
+</script>
 </body>
 </html>
