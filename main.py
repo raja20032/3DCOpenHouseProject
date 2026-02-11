@@ -180,6 +180,113 @@ def car_racing():
     return render_template('car_racing.html')
 
 
+def main_car_racing():
+    """
+    Streams webcam frames (MJPEG) while mapping gestures to controls.
+
+    Intended for Hill Climber-style controls:
+    - Open hand + left third of screen  -> hold LEFT
+    - Open hand + right third of screen -> hold RIGHT
+    - Otherwise / Closed hand           -> release both
+    """
+    graph, sess = load_graph(pre_trained_model_path)
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+    fps = 60
+    delay = 1.0 / fps
+
+    left_zone = width // 3
+    right_zone = 2 * width // 3
+
+    try:
+        while True:
+            time.sleep(delay)
+
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            display_frame = cv2.flip(frame, 1)
+            frame_rgb = cv2.cvtColor(display_frame, cv2.COLOR_BGR2RGB)
+
+            try:
+                boxes, scores, classes = detect_hands(frame_rgb, graph, sess)
+                results = predict(boxes, scores, classes, threshold, width, height)
+
+                # Default: release controls unless actively steering
+                steer_left = False
+                steer_right = False
+
+                if len(results) == 1:
+                    x_min, x_max, y_min, y_max, category = results[0]
+                    x_center = int((x_min + x_max) / 2)
+
+                    if category == "Open":
+                        if x_center <= left_zone:
+                            steer_left = True
+                        elif x_center >= right_zone:
+                            steer_right = True
+
+                    # Optional on-screen hint
+                    hint = "Stay"
+                    if steer_left:
+                        hint = "Left"
+                    elif steer_right:
+                        hint = "Right"
+                    cv2.putText(
+                        display_frame,
+                        hint,
+                        (max(10, x_min), max(20, y_min - 5)),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.6,
+                        GREEN,
+                        2,
+                    )
+
+                if steer_left:
+                    releaseKey("RIGHT")
+                    pressKey("LEFT")
+                elif steer_right:
+                    releaseKey("LEFT")
+                    pressKey("RIGHT")
+                else:
+                    releaseKey("LEFT")
+                    releaseKey("RIGHT")
+
+            except Exception as e:
+                print(f"Error in Car Racing: {e}")
+
+            ret, buffer = cv2.imencode(
+                ".jpg", display_frame, [cv2.IMWRITE_JPEG_QUALITY, 85]
+            )
+            if not ret:
+                continue
+
+            yield (
+                b"--frame\r\n"
+                b"Content-Type: image/jpeg\r\n\r\n" + buffer.tobytes() + b"\r\n"
+            )
+
+    finally:
+        cap.release()
+        # Ensure keys aren't left "stuck" down
+        try:
+            releaseKey("LEFT")
+            releaseKey("RIGHT")
+        except Exception:
+            pass
+
+
+@app.route("/video_feed_car_racing")
+def video_feed_car_racing():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(
+        main_car_racing(), mimetype="multipart/x-mixed-replace; boundary=frame"
+    )
+
+
 # Geometry Classic
 @app.route('/geometry_classic')
 def geometry_classic():
@@ -416,6 +523,12 @@ def video_feed_apple_worm():
     '''return Response(gen_frames(),
                    mimetype='multipart/x-mixed-replace; boundary=frame')'''
     return Response(main_apple_worm(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+# Fruit Ninja
+@app.route('/fruit_ninja')
+def fruit_ninja():
+    return render_template('fruit_ninja.html')
 
 
 if __name__ == '__main__':
