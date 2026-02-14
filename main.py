@@ -7,7 +7,10 @@ from utils import ORANGE, RED, GREEN
 from pyKey import pressKey, releaseKey, press 
 import keyboard
 import time
-from flask import Flask, render_template, Response
+import json
+from urllib import request as urllib_request
+from urllib.error import HTTPError, URLError
+from flask import Flask, render_template, Response, request, jsonify
 
 
 global capture, rec_frame, grey, switch, neg, face, rec, out
@@ -529,6 +532,56 @@ def video_feed_apple_worm():
 @app.route('/fruit_ninja')
 def fruit_ninja():
     return render_template('fruit_ninja.html')
+
+
+@app.route('/api_submit', methods=['POST'])
+def api_submit():
+    payload = request.get_json(silent=True) or {}
+    player = str(payload.get('player', '')).strip()
+    category = str(payload.get('category', '')).strip()
+    timing = payload.get('timing')
+
+    try:
+        timing = float(timing)
+    except (TypeError, ValueError):
+        return jsonify({'error': 'Invalid timing value'}), 400
+
+    if not player or not category:
+        return jsonify({'error': 'player and category are required'}), 400
+
+    outbound_payload = {
+        'player': player,
+        'timing': timing,
+        'category': category
+    }
+    encoded_payload = json.dumps(outbound_payload).encode('utf-8')
+    upstream_url = 'http://10.168.121.158:3000/leaderboard/update'
+    outbound_request = urllib_request.Request(
+        url=upstream_url,
+        data=encoded_payload,
+        headers={'Content-Type': 'application/json'},
+        method='PUT'
+    )
+
+    try:
+        with urllib_request.urlopen(outbound_request, timeout=10) as response:
+            response_body = response.read().decode('utf-8') or ''
+
+        return jsonify({
+            'ok': True,
+            'forwarded_to': upstream_url,
+            'response': response_body
+        }), 200
+    except HTTPError as exc:
+        error_body = exc.read().decode('utf-8', errors='replace')
+        return jsonify({
+            'error': f'Upstream API returned HTTP {exc.code}',
+            'response': error_body
+        }), 502
+    except URLError as exc:
+        return jsonify({'error': f'Unable to reach upstream API: {exc.reason}'}), 502
+    except Exception as exc:
+        return jsonify({'error': f'Unexpected error: {str(exc)}'}), 500
 
 
 if __name__ == '__main__':
